@@ -1,0 +1,11 @@
+[tools]
+elixir = "latest"
+erlang = "latest"
+node = "lts"
+"npm:@antfu/ni" = "latest"
+"npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:@github/copilot" = "latest"
+"npm:@openai/codex" = "latest"
+"npm:portless" = "latest"
+opencode = "latest"
+pnpm = "latest"

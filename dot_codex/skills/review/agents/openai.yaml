@@ -1,0 +1,3 @@
+interface:
+  display_name: "Review"
+  short_description: "Review code first, then use Copilot for larger changes"

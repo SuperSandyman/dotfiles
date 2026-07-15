@@ -49,3 +49,6 @@ fi
 if command -v bat >/dev/null 2>&1; then
     alias cat='bat --paging=never'
 fi
+
+# LM Studio is optional and may not be installed on every machine.
+[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
