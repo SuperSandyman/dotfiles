@@ -1,38 +1,6 @@
 return {
 	{
-		"williamboman/mason.nvim",
-		build = ":MasonUpdate",
-		opts = {
-			ui = { border = "rounded" },
-		},
-	},
-
-	{
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		dependencies = { "williamboman/mason.nvim" },
-		opts = {
-			ensure_installed = {
-				"bash-language-server",
-				"css-lsp",
-				"elixir-ls",
-				"html-lsp",
-				"json-lsp",
-				"lua-language-server",
-				"prettier",
-				"rust-analyzer",
-				"stylua",
-				"typescript-language-server",
-				"yaml-language-server",
-			},
-			auto_update = false,
-			run_on_start = true,
-			start_delay = 3000,
-		},
-	},
-
-	{
 		"neovim/nvim-lspconfig",
-		dependencies = { "williamboman/mason.nvim" },
 		event = { "BufReadPost", "BufNewFile" },
 		config = function()
 			local keymap = vim.keymap.set

@@ -23,6 +23,7 @@ cursor-style-blink = false
 cursor-opacity = 0.92
 
 # Terminal behavior
+command = zsh
 shell-integration = detect
 copy-on-select = clipboard
 clipboard-read = ask
