@@ -14,12 +14,17 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    qylock = {
+      url = "github:Darkkal44/qylock";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     {
       nixpkgs,
       home-manager,
+      qylock,
       ...
     }:
     let
@@ -76,6 +81,7 @@
         modules = [
           ./nixos/hosts/nixos
           home-manager.nixosModules.home-manager
+          qylock.nixosModules.default
           {
             home-manager = {
               useGlobalPkgs = true;

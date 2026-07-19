@@ -9,7 +9,10 @@
         variant = "";
       };
     };
-    displayManager.sddm.enable = true;
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = true;
+    };
     desktopManager.plasma6.enable = true;
     printing.enable = true;
     pulseaudio.enable = false;
@@ -47,4 +50,10 @@
   ];
 
   programs.firefox.enable = true;
+
+  programs.qylock = {
+    enable = true;
+    theme = "pixel-night-city";
+    quickshell.enable = false;
+  };
 }
