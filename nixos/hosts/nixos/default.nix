@@ -8,7 +8,7 @@
     ../../nix-storage.nix
   ];
 
-  networking.hostName = "nixos";
+  networking.hostName = "sandyman-nixos";
 
   # Keep this at the NixOS version used for the first installation.
   system.stateVersion = "26.05";
