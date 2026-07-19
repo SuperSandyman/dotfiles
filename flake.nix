@@ -28,7 +28,7 @@
         inherit system;
         config.allowUnfree = true;
       };
-      localPackages = import ./profiles/fast-cli/packages { inherit pkgs; };
+      localPackages = import ./profiles/development/packages { inherit pkgs; };
       updateAll = pkgs.writeShellApplication {
         name = "dotfiles-update-all";
         runtimeInputs = [
@@ -40,13 +40,11 @@
           cd "$repository"
 
           nix flake update
-          nix flake update --flake "$repository/profiles/fast-cli"
-          nix flake update --flake "$repository/profiles/dev-tools"
-          nix flake update --flake "$repository/profiles/runtimes"
+          nix flake update --flake "$repository/profiles/development"
 
-          nix profile upgrade fast-cli dev-tools runtimes
+          nix profile upgrade development
 
-          echo "Updated all four flake.lock files and the three user profiles."
+          echo "Updated the system and development flake.lock files."
           echo "Review the changes, then rebuild NixOS to apply system and Home Manager updates."
         '';
       };
@@ -62,7 +60,7 @@
       apps.${system}.update-all = {
         type = "app";
         program = "${updateAll}/bin/dotfiles-update-all";
-        meta.description = "Update every dotfiles lock file and user package profile";
+        meta.description = "Update the system and development environments";
       };
 
       homeConfigurations.sandyman = home-manager.lib.homeManagerConfiguration {

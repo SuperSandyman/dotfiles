@@ -1,23 +1,20 @@
 # dotfiles
 
-NixOSとHome ManagerをNix flakesで管理する個人環境です。OSからユーザー設定
-までroot flakeで構成し、更新周期が異なるCLIとランタイムは別flake・別
-`flake.lock`に分離しています。
+NixOS環境を、更新目的の異なる2つのflakeで管理します。
 
-| 管理単位 | 場所 | 内容 |
+| グループ | 場所 | 内容 |
 | --- | --- | --- |
-| NixOS + Home Manager | リポジトリ直下 | OS、KDE、シェル、エディタ、フォント、GUI設定 |
-| 高速更新CLI | `profiles/fast-cli` | Herdr、Codex、Copilot CLI、OpenCode、Pi、ghなど |
-| 開発ツール | `profiles/dev-tools` | LSP、formatter、ripgrepなど |
-| ランタイム | `profiles/runtimes` | Node.js、pnpm、Erlang、Elixir、Rust、GCC |
+| システム | リポジトリ直下 | NixOS、KDE、Home Manager、フォント、Ghostty、ユーザー設定 |
+| 開発環境 | `profiles/development` | VSCode、Neovim、ランタイム、LSP、CLI、AI agent |
 
-各サブflakeは独立したlock fileを持ちます。たとえば高速更新CLIを更新しても、
-Home Manager、開発ツール、ランタイムのlock fileは変わりません。
+それぞれ独立した`flake.lock`を持つため、OSを固定したまま開発環境だけを更新
+できます。
 
 ## 構成
 
 ```text
 flake.nix
+flake.lock
 home.nix
 nixos/
 ├── hosts/nixos/
@@ -28,89 +25,88 @@ nixos/
 │   └── desktop.nix
 └── nix-storage.nix
 profiles/
-├── fast-cli/
-├── dev-tools/
-└── runtimes/
+└── development/
+    ├── flake.nix
+    ├── flake.lock
+    └── packages/
 ```
 
-`nixos/hosts/nixos`はこのマシン固有のhostname、filesystem UUID、
-hardware設定を持ちます。再利用可能なOS設定は`nixos/modules`に分離しています。
+開発環境には次のものをまとめています。
 
-## 新規環境への初回導入
+- VSCode、Neovim
+- Node.js、pnpm、Erlang、Elixir、Rust、Cargo、GCC
+- language server、formatter、ripgrepなどの開発CLI
+- Herdr、Codex、Copilot CLI、OpenCode、Pi、GitHub CLI
+
+miseとMasonにはランタイム、エディタ、LSPをインストールさせません。
+
+## 新規環境への導入
 
 ```sh
-git clone https://github.com/SuperSandyman/dotfiles.git ~/develop/dotfiles
+git clone git@github.com:SuperSandyman/dotfiles.git ~/develop/dotfiles
 cd ~/develop/dotfiles
 
-nix profile add path:$PWD/profiles/fast-cli#default
-nix profile add path:$PWD/profiles/dev-tools#default
-nix profile add path:$PWD/profiles/runtimes#default
+nix profile add path:$PWD/profiles/development#default
 
 sudo nixos-rebuild test --flake path:$PWD#nixos
 sudo nixos-rebuild switch --flake path:$PWD#nixos
 ```
 
-最初に`test`で一時的に有効化し、デスクトップ・ネットワーク・シェルを確認して
+最初に`test`で一時的に有効化し、デスクトップ、ネットワーク、シェルを確認して
 から`switch`します。Home ManagerもNixOS moduleとして統合されているため、
 `switch`でホーム設定まで反映されます。
 
 既存の`/etc/nixos`は移行確認用のバックアップとして残して構いません。以後は
-このリポジトリを直接rebuild対象にするため、`/etc/nixos`の設定は更新しません。
+このリポジトリを直接rebuild対象にします。
 
-miseとMasonにはランタイムやLSPをインストールさせません。これらは独立した
-Nix profileから提供します。
+## 旧3 profileからの移行
+
+以前の`fast-cli`、`dev-tools`、`runtimes`を導入済みの場合は、一度だけ統合
+profileへ置き換えます。
+
+```sh
+cd ~/develop/dotfiles
+nix profile remove fast-cli dev-tools runtimes
+nix profile add path:$PWD/profiles/development#default
+```
 
 ## まとめて更新
 
-root、fast-cli、dev-tools、runtimesの4つのlock fileと、3つのユーザーprofileを
-まとめて更新します。
+システムと開発環境の両方を更新し、開発環境profileへ反映します。
 
 ```sh
 cd ~/develop/dotfiles
 nix run path:.#update-all
 ```
 
-更新差分とbuildを確認してから、NixOSとHome Managerを同時に反映します。
+差分とsystem closureを確認してから、NixOSとHome Managerを反映します。
 
 ```sh
-git diff -- flake.lock profiles/*/flake.lock
+git diff -- flake.lock profiles/development/flake.lock
 nix build path:.#nixosConfigurations.nixos.config.system.build.toplevel --no-link
 sudo nixos-rebuild switch --flake path:$PWD#nixos
 ```
 
 `update-all`自体はroot権限を要求せず、`nixos-rebuild`も実行しません。
 
-## グループごとの独立更新
+## 個別更新
 
-高速更新CLIだけ:
-
-```sh
-cd ~/develop/dotfiles
-nix flake update --flake ./profiles/fast-cli
-nix profile upgrade fast-cli
-```
-
-開発ツールだけ:
+システム側だけ:
 
 ```sh
 cd ~/develop/dotfiles
-nix flake update --flake ./profiles/dev-tools
-nix profile upgrade dev-tools
+nix flake update
+nix build path:.#nixosConfigurations.nixos.config.system.build.toplevel --no-link
+sudo nixos-rebuild switch --flake path:$PWD#nixos
 ```
 
-ランタイムだけ:
+開発環境側だけ:
 
 ```sh
 cd ~/develop/dotfiles
-nix flake update --flake ./profiles/runtimes
-nix profile upgrade runtimes
+nix flake update --flake ./profiles/development
+nix profile upgrade development
 ```
-
-更新前にビルドだけ確認したい場合は、対象に対して
-`nix build ./profiles/fast-cli`のように実行します。
-
-rootのnixpkgsとHome Managerだけを更新する場合は、rootで
-`nix flake update`してからrebuildします。
 
 ## `/nix`の容量対策
 

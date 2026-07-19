@@ -14,11 +14,10 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    # CLI tools and runtimes live in independently updatable Nix profiles.
+    # Editors, CLI tools, and runtimes live in the development Nix profile.
     ghostty
     inconsolata
     nerd-fonts.hack
-    vscode
   ];
 
   home.sessionPath = [ "$HOME/.lmstudio/bin" ];
@@ -38,6 +37,8 @@
       la = "eza --icons -a --group-directories-first";
       grep = "rg";
       cat = "bat --paging=never";
+      vi = "nvim";
+      vim = "nvim";
     };
     initExtra = ''
       if command -v herdr >/dev/null 2>&1; then
@@ -56,6 +57,8 @@
       la = "eza --icons -a --group-directories-first";
       grep = "rg";
       cat = "bat --paging=never";
+      vi = "nvim";
+      vim = "nvim";
     };
     initContent = lib.mkOrder 1200 ''
       if [[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]]; then
@@ -90,13 +93,6 @@
     enableBashIntegration = true;
     enableZshIntegration = true;
     options = [ "--cmd cd" ];
-  };
-
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
   };
 
   xdg.configFile = {
