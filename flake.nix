@@ -14,6 +14,11 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     qylock = {
       url = "github:Darkkal44/qylock";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,6 +29,7 @@
     {
       nixpkgs,
       home-manager,
+      plasma-manager,
       qylock,
       ...
     }:
@@ -73,7 +79,10 @@
         extraSpecialArgs = {
           inherit localPackages;
         };
-        modules = [ ./home.nix ];
+        modules = [
+          plasma-manager.homeModules.plasma-manager
+          ./home.nix
+        ];
       };
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
@@ -87,6 +96,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "nix-backup";
+              sharedModules = [ plasma-manager.homeModules.plasma-manager ];
               extraSpecialArgs = {
                 inherit localPackages;
               };

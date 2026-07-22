@@ -8,6 +8,10 @@
       limine = {
         enable = true;
         maxGenerations = 5;
+        style = {
+          wallpaperStyle = "stretched";
+          wallpapers = [ ../assets/limine-nixos-background.png ];
+        };
       };
     };
   };

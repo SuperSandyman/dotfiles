@@ -7,6 +7,8 @@
 }:
 
 {
+  imports = [ ./plasma.nix ];
+
   home.username = "sandyman";
   home.homeDirectory = "/home/sandyman";
   home.stateVersion = "26.05";
@@ -18,9 +20,13 @@
     ghostty
     inconsolata
     nerd-fonts.hack
+    noto-fonts-cjk-sans
   ];
 
-  home.sessionPath = [ "$HOME/.lmstudio/bin" ];
+  home.sessionPath = [
+    "$HOME/.local/bin"
+    "$HOME/.lmstudio/bin"
+  ];
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
