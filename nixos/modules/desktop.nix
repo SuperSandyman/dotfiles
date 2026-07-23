@@ -45,13 +45,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # Inochi2D model creation and asset preparation
-    ffmpeg
-    gimp
-    imagemagick
-    inochi-creator
     kdePackages.kate
-    krita
     microsoft-edge
   ];
 
