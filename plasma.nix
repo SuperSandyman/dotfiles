@@ -4,7 +4,16 @@ let
   defaultPanelWidgets = [
     "org.kde.plasma.kickoff"
     "org.kde.plasma.pager"
-    "org.kde.plasma.icontasks"
+    {
+      iconTasks.launchers = [
+        "applications:systemsettings.desktop"
+        "preferred://filemanager"
+        "applications:org.kde.konsole.desktop"
+        "applications:codex-desktop.desktop"
+        "applications:code.desktop"
+        "applications:microsoft-edge.desktop"
+      ];
+    }
     "org.kde.plasma.marginsseparator"
     "org.kde.plasma.kimpanel"
     "org.kde.plasma.systemtray"
@@ -49,7 +58,10 @@ in
     };
 
     input = {
-      keyboard.layouts = [ { layout = "us"; } ];
+      keyboard = {
+        layouts = [ { layout = "us"; } ];
+        options = [ "ctrl:nocaps" ];
+      };
       mice = [
         {
           name = "Logitech MX Ergo";
@@ -96,34 +108,20 @@ in
       {
         location = "bottom";
         screen = 0;
+        hiding = "autohide";
         widgets = defaultPanelWidgets;
       }
       {
         location = "bottom";
         screen = 1;
+        hiding = "autohide";
         widgets = defaultPanelWidgets;
       }
       {
         location = "bottom";
         screen = 2;
-        widgets = [
-          "org.kde.plasma.kickoff"
-          "org.kde.plasma.pager"
-          {
-            iconTasks.launchers = [
-              "applications:systemsettings.desktop"
-              "preferred://filemanager"
-              "applications:org.kde.konsole.desktop"
-              "applications:codex-desktop.desktop"
-              "applications:code.desktop"
-            ];
-          }
-          "org.kde.plasma.marginsseparator"
-          "org.kde.plasma.kimpanel"
-          "org.kde.plasma.systemtray"
-          "org.kde.plasma.digitalclock"
-          "org.kde.plasma.showdesktop"
-        ];
+        hiding = "autohide";
+        widgets = defaultPanelWidgets;
       }
     ];
 
