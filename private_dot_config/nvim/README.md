@@ -11,7 +11,6 @@ A Neovim setup tuned for reading documents and code.
 - `<Space>e`: エクスプローラーを表示
 - `<Space>o`: ドキュメントアウトライン
 - `<Space>z`: 集中モード
-- `<Space>mr`: Markdown 表示を切り替え
 - `<Space>w`: 折り返しを切り替え
 
 ## GitHub PR レビュー

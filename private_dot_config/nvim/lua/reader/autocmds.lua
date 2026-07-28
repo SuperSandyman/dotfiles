@@ -1,5 +1,15 @@
 local group = vim.api.nvim_create_augroup("ReaderNvim", { clear = true })
 
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+	group = group,
+	pattern = { "*.md", "*.markdown" },
+	callback = function(event)
+		if vim.bo[event.buf].filetype == "" then
+			vim.bo[event.buf].filetype = "markdown"
+		end
+	end,
+})
+
 vim.api.nvim_create_autocmd("TextYankPost", {
 	group = group,
 	callback = function()
@@ -38,6 +48,9 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.linebreak = true
 		vim.opt_local.conceallevel = 2
 		vim.opt_local.spell = false
+		if vim.bo.filetype == "markdown" then
+			vim.opt_local.foldcolumn = "0"
+		end
 	end,
 })
 
@@ -55,7 +68,6 @@ vim.api.nvim_create_user_command("Cheatsheet", function()
 		"- Explorer: 矢印で移動、Enter で開く、Left で閉じる、q で終了",
 		"- Explorer: I で gitignore 対象を表示、H で dotfile を表示",
 		"- Space z : 集中モード",
-		"- Space m r : Markdown 表示を切り替え",
 		"- Space w : 折り返しを切り替え",
 		"- Space u : 現在位置の折り畳みを開閉",
 		"",

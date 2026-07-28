@@ -44,42 +44,6 @@ return {
 	},
 
 	{
-		"MeanderingProgrammer/render-markdown.nvim",
-		ft = { "markdown", "Avante", "codecompanion" },
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
-		opts = {
-			render_modes = true,
-			heading = {
-				enabled = true,
-				sign = true,
-				icons = { "󰼏  ", "󰎨  ", "󰼑  ", "󰎲  ", "󰼓  ", "󰎴  " },
-				backgrounds = {
-					"RenderMarkdownH1Bg",
-					"RenderMarkdownH2Bg",
-					"RenderMarkdownH3Bg",
-					"RenderMarkdownH4Bg",
-					"RenderMarkdownH5Bg",
-					"RenderMarkdownH6Bg",
-				},
-			},
-			code = {
-				enabled = true,
-				sign = true,
-				style = "full",
-				border = "thin",
-				language_pad = 1,
-			},
-			dash = { enabled = true },
-			checkbox = { enabled = true },
-			quote = { enabled = true },
-			table = { enabled = true, style = "full" },
-		},
-	},
-
-	{
 		"kevinhwang91/nvim-ufo",
 		event = "BufReadPost",
 		dependencies = { "kevinhwang91/promise-async" },
@@ -117,7 +81,27 @@ return {
 	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
-		opts = {},
+		opts = { map_cr = false },
+		config = function(_, opts)
+			local autopairs = require("nvim-autopairs")
+			autopairs.setup(opts)
+
+			vim.keymap.set("i", "<CR>", function()
+				if vim.bo.filetype == "markdown" and vim.fn.pumvisible() == 0 then
+					local continuation = require("reader.markdown").continue_list()
+					if continuation then
+						return continuation
+					end
+				end
+
+				return autopairs.completion_confirm()
+			end, {
+				expr = true,
+				noremap = true,
+				replace_keycodes = false,
+				desc = "改行（Markdown リストを継続）",
+			})
+		end,
 	},
 
 	{
