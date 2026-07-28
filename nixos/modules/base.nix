@@ -19,6 +19,8 @@
   networking.networkmanager.enable = true;
   time.timeZone = "Asia/Tokyo";
 
+  virtualisation.docker.enable = true;
+
   i18n.defaultLocale = "ja_JP.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "ja_JP.UTF-8";
@@ -49,6 +51,7 @@
     description = "Sandyman";
     shell = pkgs.zsh;
     extraGroups = [
+      "docker"
       "networkmanager"
       "wheel"
     ];
