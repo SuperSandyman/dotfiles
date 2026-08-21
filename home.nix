@@ -6,6 +6,22 @@
   ...
 }:
 
+let
+  dotfilesDir = "${config.home.homeDirectory}/develop/dotfiles";
+  shellAliases = {
+    ls = "eza --icons --group-directories-first";
+    ll = "eza --icons -la --group-directories-first";
+    la = "eza --icons -a --group-directories-first";
+    grep = "rg";
+    cat = "bat --paging=never";
+    vi = "nvim";
+    vim = "nvim";
+    dotfiles-update = "cd ${dotfilesDir} && nix run path:.#update-all";
+    nixos-update = "cd ${dotfilesDir} && nix flake update";
+    dev-update = "cd ${dotfilesDir} && nix flake update --flake ./profiles/development && nix profile upgrade development";
+    nixos-switch = "sudo nixos-rebuild switch --flake path:${dotfilesDir}#nixos";
+  };
+in
 {
   imports = [ ./plasma.nix ];
 
@@ -37,15 +53,7 @@
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    shellAliases = {
-      ls = "eza --icons --group-directories-first";
-      ll = "eza --icons -la --group-directories-first";
-      la = "eza --icons -a --group-directories-first";
-      grep = "rg";
-      cat = "bat --paging=never";
-      vi = "nvim";
-      vim = "nvim";
-    };
+    inherit shellAliases;
     initExtra = ''
       if command -v herdr >/dev/null 2>&1; then
         source <(herdr completion bash)
@@ -57,15 +65,7 @@
     enable = true;
     enableCompletion = true;
     syntaxHighlighting.enable = true;
-    shellAliases = {
-      ls = "eza --icons --group-directories-first";
-      ll = "eza --icons -la --group-directories-first";
-      la = "eza --icons -a --group-directories-first";
-      grep = "rg";
-      cat = "bat --paging=never";
-      vi = "nvim";
-      vim = "nvim";
-    };
+    inherit shellAliases;
     initContent = lib.mkOrder 1200 ''
       if [[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]]; then
         source "$HOME/google-cloud-sdk/path.zsh.inc"
@@ -124,7 +124,6 @@
     ".codex/skills/empirical-prompt-tuning".source = ./dot_codex/skills/empirical-prompt-tuning;
     ".codex/skills/opensrc".source = ./dot_codex/skills/opensrc;
     ".codex/skills/planning".source = ./dot_codex/skills/planning;
-    ".codex/skills/review".source = ./dot_codex/skills/review;
     ".codex/skills/worktree".source = ./dot_codex/skills/worktree;
     ".codex/skills/hunk-review/SKILL.md".source =
       "${localPackages.hunkdiff}/share/hunkdiff/skills/hunk-review/SKILL.md";

@@ -51,6 +51,7 @@
     description = "Sandyman";
     shell = pkgs.zsh;
     extraGroups = [
+      "dialout"
       "docker"
       "networkmanager"
       "wheel"

@@ -27,6 +27,8 @@
 
   security.rtkit.enable = true;
 
+  programs.kdeconnect.enable = true;
+
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";

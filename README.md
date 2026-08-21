@@ -89,6 +89,19 @@ sudo nixos-rebuild switch --flake path:$PWD#nixos
 
 `update-all`自体はroot権限を要求せず、`nixos-rebuild`も実行しません。
 
+## 更新用alias
+
+Home Managerでbash/zshの両方に次のaliasを設定しています。
+
+```sh
+dotfiles-update # NixOSと開発環境をまとめて更新
+nixos-update   # NixOS側のflake.lockだけ更新
+dev-update     # 開発環境のflake.lockとprofileを更新
+nixos-switch   # 現在の設定をNixOSへ反映
+```
+
+どのディレクトリから実行しても`~/develop/dotfiles`を対象にします。
+
 ## 個別更新
 
 システム側だけ:
