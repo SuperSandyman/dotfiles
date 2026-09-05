@@ -16,6 +16,16 @@ let
     cat = "bat --paging=never";
     vi = "nvim";
     vim = "nvim";
+    lmstudio = "lm-studio";
+    lmstudio-chat = "lms runtime select llama.cpp-linux-x86_64-vulkan-avx2@2.24.0 && lms chat";
+    lmstudio-runtime = "lms runtime select llama.cpp-linux-x86_64-vulkan-avx2@2.24.0";
+    lmstudio-load = "lms runtime select llama.cpp-linux-x86_64-vulkan-avx2@2.24.0 && lms load";
+    lmstudio-models = "lms ls";
+    lmstudio-loaded = "lms ps";
+    lmstudio-server = "lms server start --port 1234";
+    lmstudio-server-status = "lms server status";
+    lmstudio-server-stop = "lms server stop";
+    codex-lmstudio = "codex --oss";
     dotfiles-update = "cd ${dotfilesDir} && nix run path:.#update-all";
     nixos-update = "cd ${dotfilesDir} && nix flake update";
     dev-update = "cd ${dotfilesDir} && nix flake update --flake ./profiles/development && nix profile upgrade development";
@@ -35,13 +45,14 @@ in
     # Editors, CLI tools, and runtimes live in the development Nix profile.
     ghostty
     inconsolata
+    # Includes the GUI and a NixOS-compatible `lms` CLI.
+    lmstudio
     nerd-fonts.hack
     noto-fonts-cjk-sans
   ];
 
   home.sessionPath = [
     "$HOME/.local/bin"
-    "$HOME/.lmstudio/bin"
   ];
   home.sessionVariables = {
     EDITOR = "nvim";

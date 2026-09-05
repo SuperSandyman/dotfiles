@@ -33,6 +33,10 @@
         inherit system;
         config.allowUnfree = true;
       };
+      nodejs = pkgs.nodejs_26;
+      pnpm = pkgs.pnpm.override {
+        nodejs-slim = pkgs.nodejs-slim_26;
+      };
       llmAgents = llm-agents.packages.${system};
       localPackages = import ./packages { inherit pkgs; };
     in

@@ -1,127 +1,121 @@
 ---
 name: planning
 description: >
-  When the user asks for a plan/計画/設計/方針/手順を作る, create a written plan only (no implementation).
-  Save the plan as a Markdown file under <project-root>/plan/ using the intended branch name or worktree name.
+  When the user asks for a plan, requirements definition, feature summary, design,
+  or a way to organize requirements, create a requirements-oriented document and
+  save it as a page in the Notion database AI Base / AI Notes. Do not implement the
+  requested feature as part of this workflow.
 metadata:
-  short-description: Plan-only workflow + save plan under ./plan/ using a branch-based filename
+  short-description: Requirements and feature definition saved to Notion AI Notes
 ---
 
-# Codex Plan-First Skill
+# Requirements-First Skill
 
 ## Goal
-Provide a reliable “plan-first” workflow:
-- If asked to create a plan, **do not implement**.
-- Persist the plan as a Markdown file under **<project-root>/plan/**.
-- Handle unclear requirements explicitly, either by saving a plan with clearly separated assumptions/open questions or by asking before saving when a meaningful plan cannot be written.
+
+Turn an idea, request, or feature discussion into a reviewable requirements
+document. The document should clarify what to build and why, rather than prescribe
+implementation steps. Save the result in the user's Notion workspace under
+**AI Base / AI Notes**.
 
 ## When to apply
-Apply this skill when the user message includes intents such as:
-- “プラン作って / 計画立てて / 設計して / 方針出して / 手順まとめて”
-- “Plan mode で” “まず計画”
-- “作業手順だけ欲しい（実装は後）”
 
-## Hard rules (must follow)
-1. **Plan request ⇒ No implementation**
-   - Do NOT edit code, do NOT run commands that change files, do NOT create PRs.
-   - Only analyze, propose, and write the plan document.
+Apply this skill when the user asks to:
 
-2. **Always save the plan**
-   - Save the plan file at:  
-     `<project-root>/plan/<NAME>.md`
+- 作る計画、設計、方針、要件定義、仕様、機能一覧、機能整理
+- まず要件をまとめる、ユーザーストーリーを整理する、受け入れ条件を決める
+- “plan first” or an equivalent requirements-first workflow
 
-   - `<NAME>` must be derived from the **intended branch name**.
-   - Never use placeholder names such as `plan-unnamed`, `unnamed`, `tmp`, or date-only names.
-   - You must decide the filename before writing the plan.
-   - If the branch name is not given, propose one first using the branch naming rules below, then save the plan with that branch-based filename.
-   - If you still cannot derive or propose a reasonable branch name, stop and ask the user instead of creating a temporary filename.
-   - Worktree name may be proposed separately, but it does not replace the branch-based filename rule.
-   - A plan is not complete unless the saved file path is concrete and branch-based.
+## Hard rules
 
-   - **Important:** Do NOT create nested directories based on `<type>/...`.  
-     Instead, **flatten** branch/worktree names into a single filename:
-     - Replace `/` with `-`
-     - Example: `feat/add-image-upload` → `plan/feat-add-image-upload.md`
-     - Example: `chore/cleanup-worktree-db` → `plan/chore-cleanup-worktree-db.md`
+1. **Requirements request ⇒ no implementation**
+   - Do not edit application code, run mutating implementation commands, create a
+     branch, or open a pull request as part of this workflow.
+   - If the user also requests implementation, separate the requirements phase from
+     implementation and wait for an explicit implementation request after the
+     requirements are recorded.
 
-3. **Ask questions when unclear**
-   - Planning may include unknowns. Do not treat every unknown as a blocker.
-   - If a useful plan can still be written, save the plan and put the unknowns in **Open questions**. Separate confirmed assumptions from unresolved items.
-   - Stop and ask the user **before saving** only when the uncertainty prevents a meaningful branch name or plan skeleton. Typical blockers:
-     - the requested change/domain is too vague to infer a purpose or change type
-     - a safe branch name cannot be reasonably proposed
-     - the user asks for a plan but gives conflicting goals that would produce different plans
-   - If any of the following is missing/ambiguous but not blocking, record it in **Open questions** as implementation-before-start confirmation:
-     - target behavior / acceptance criteria
-     - affected modules or files
-     - constraints (compatibility, performance, security, style)
-     - branch naming (if it cannot be reasonably proposed from the request; do not fall back to `plan-unnamed.md`)
-     - test strategy / expected environment
+2. **Notion is the source of truth for the document**
+   - Use the connected Notion tools; do not save the document under a local
+     `plan/` directory.
+   - If Notion is unavailable or the target cannot be identified unambiguously,
+     report the blocker and do not claim that the document was saved. Do not silently
+     fall back to a local file.
 
-## Branch naming (must follow)
-Use short, readable branch names with a consistent prefix and 2–5 English words.
+3. **Separate facts from uncertainty**
+   - Preserve confirmed requirements, assumptions, decisions, and open questions as
+     separate sections.
+   - Do not invent product behavior, constraints, users, or acceptance criteria.
+   - Ask a question before saving only when the ambiguity prevents a meaningful
+     requirements skeleton; otherwise record it under Open questions.
 
-### Format
-- `<type>/<word1>-<word2>-<word3>` or `<type>/<word1>-<word2>-<word3>-<word4>`
-- Lowercase only
-- Words are hyphen-separated
-- Avoid abbreviations unless they are widely understood (e.g., `api`, `ui`, `ci`)
+## Notion destination and workflow
 
-### Types
-- `feat/` — new features
-- `fix/` — bug fixes (non-urgent)
-- `hotfix/` — urgent production fixes
-- `chore/` — maintenance, refactors, tooling, CI, docs (non-feature work)
+Use the Notion connector in this order:
 
-### Examples
-- `feat/add-image-upload`
-- `feat/enable-markdown-preview`
-- `fix/prevent-null-config`
-- `hotfix/restore-ci-release`
-- `chore/cleanup-worktree-db`
+1. Search for the exact **AI Base** page and **AI Notes** database. Select the
+   database whose ancestor path is `AI Base / AI Notes`; do not rely only on a
+   similarly named page or database.
+2. Fetch the AI Notes database before creating a page. Read its data-source URL and
+   current property schema; use the exact title-property name and available option
+   names returned by Notion.
+3. Before creating or updating page content, fetch
+   `notion://docs/enhanced-markdown-spec` through the Notion connector and follow
+   that Notion-flavored Markdown specification. Put the page title in `properties`,
+   not at the top of the page content.
+4. Create one page under the AI Notes data source. Use a concise feature-oriented
+   title, normally in the form `要件定義：<機能名>` or `<機能名>の要件整理`.
+   Use the exact property names from the fetched schema. For the current AI Notes
+   schema, set:
+   - `Title`: the page title
+   - `Source`: `Codex`
+   - `Status`: `Inbox`
+   - `Tags`: only existing options that are clearly applicable
+   - `Project`: only when the related project is known; never guess a relation
+   If the schema changes, adapt to its title property and available options rather
+   than forcing these names or values.
+5. Fetch the created page to verify its content and obtain the Notion URL. Report
+   that URL along with a short summary. If this is a continuation of an existing
+   requirements document, fetch and update the matching page instead of creating a
+   duplicate, preserving child content.
 
-## Plan document structure (write in Japanese unless the user uses English)
-In the saved plan markdown, include at minimum:
+## Codex CLI prerequisite
 
-1. **Summary**
-   - 目的（何を達成するか）
-   - 非目的（今回はやらないこと）
+When running in Codex CLI, use the official `notion@openai-curated` plugin. It must
+be installed and enabled, and the Notion connector must be authenticated in the
+current Codex account. The one-time setup is:
 
-2. **Proposed branch/worktree**
-   - Branch name:
-   - Worktree name:
-   - Plan file path: `plan/...`
+```sh
+codex plugin add notion@openai-curated
+codex login status
+```
 
-3. **Scope & impact**
-   - 変更対象（主要ファイル/モジュール候補）
-   - 影響範囲（API/UI/DB/設定/CIなど）
+Start a new CLI session after installing the plugin. Complete any browser-based
+Notion connection prompt when it appears. Never put Notion OAuth tokens, API keys,
+or `~/.codex/auth.json` into dotfiles. If the connector is unavailable in the
+current CLI session, report the setup blocker instead of writing a local fallback.
 
-4. **Steps**
-   - 手順を番号付きで（小さく分割）
-   - 各手順の完了条件（Done criteria）
+## Requirements document structure
 
-5. **Risks & mitigations**
-   - 想定リスク
-   - 回避策/ロールバック案
+Write in Japanese unless the user uses English. Adapt the sections to the request,
+but cover the following where relevant:
 
-6. **Validation**
-   - テスト方針（unit/integration/e2e）
-   - 具体的な確認観点（最低3つ）
+1. **概要** — 背景、現状の課題、目的、対象範囲
+2. **ゴール / 非ゴール** — 今回達成すること、明確に対象外とすること
+3. **利用者とユースケース** — 対象ユーザー、利用シーン、ユーザーストーリー
+4. **機能概要** — 機能のまとまり、主要な画面・操作・入出力・連携
+5. **機能要件** — `FR-001` のような ID、前提、期待する振る舞い、例外・境界条件
+6. **非機能要件** — 性能、可用性、セキュリティ、権限、互換性、運用、アクセシビリティ
+7. **受け入れ条件** — 要件を満たしたと判断できる observable な条件
+8. **制約・前提・決定事項** — 技術や運用上の既知の制約と、確定した判断
+9. **未決事項 / オープンクエスチョン** — 実装前に確認が必要な項目
 
-7. **Open questions**
-   - 実装に必要な確認事項（質問リスト）
-
-## Ambiguity handling examples
-- User gives a clear change but omits branch name: propose a branch name, save the plan, and list remaining implementation questions.
-  - Example: “一覧に検索を追加する計画だけ” → `feat/add-list-search` → `plan/feat-add-list-search.md`
-- User gives a branch name: use it exactly for the branch, flatten it for the filename, and save the plan.
-  - Example: `fix/dashboard-blank-screen` → `plan/fix-dashboard-blank-screen.md`
-- User gives only a worktree name: do not use it as the filename by itself. Propose a branch name from the requested work and use the flattened branch name for the plan file. If the requested work is too vague to infer a branch, ask first.
-  - Example: worktree `cleanup-db`, request “DBまわりを整理” → propose `chore/cleanup-database-layer` if that is a reasonable interpretation, then save `plan/chore-cleanup-database-layer.md` with assumptions and open questions.
-- User gives too little to infer a meaningful plan, such as “なんか改善する計画を作って”: ask for the target area and desired outcome before saving.
+Do not turn the document into a file-by-file implementation plan, branch/worktree
+proposal, task breakdown, or test-command checklist. Testability may be expressed
+as acceptance conditions, but implementation sequencing belongs to a later phase.
 
 ## Interaction style
-- Plan作成中は、断定よりも「前提」「選択肢」「理由」を明確にする。
-- 不明点はまとめて質問し、ユーザーの回答を待ってから次のフェーズへ進む。
-- 余計な長文化を避け、実装に直結する粒度で書く（箇条書き中心）。
-- `plan-unnamed.md` を含む仮名ファイルは作らない。先に branch name と plan file path を確定させる。
+
+- Requirements整理中は、目的・前提・選択肢・判断理由を短く明示する。
+- 仕様として確定していない内容は「仮定」または「未決事項」として書く。
+- 完成後は Notion ページ URL、保存先（AI Base / AI Notes）、主な未決事項だけを返す。

@@ -1,6 +1,8 @@
 model = "gpt-5.6-sol"
 model_reasoning_effort = "low"
 personality = "pragmatic"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
 suppress_unstable_features_warning = true
 approvals_reviewer = "user"
 
@@ -118,6 +120,9 @@ fast_default_opt_out = true
 enabled = true
 
 [plugins."github@openai-curated"]
+enabled = true
+
+[plugins."notion@openai-curated"]
 enabled = true
 
 [plugins."documents@openai-primary-runtime"]

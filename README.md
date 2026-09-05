@@ -38,6 +38,8 @@ profiles/
 - language server、formatter、ripgrepなどの開発CLI
 - Herdr、Codex、Copilot CLI、OpenCode、Pi、GitHub CLI
 
+LM StudioはHome Managerで管理し、GUIの`lm-studio`とNixOS向けに調整済みの`lms` CLIを導入します。
+
 miseとMasonにはランタイム、エディタ、LSPをインストールさせません。
 
 ## 新規環境への導入
@@ -101,6 +103,35 @@ nixos-switch   # 現在の設定をNixOSへ反映
 ```
 
 どのディレクトリから実行しても`~/develop/dotfiles`を対象にします。
+
+## LM Studio
+
+`nixos-switch`後に、次のaliasでLM StudioとローカルAPIを操作できます。
+
+```sh
+lmstudio                  # GUIを起動
+lmstudio-models           # ダウンロード済みモデルを表示
+lmstudio-loaded           # メモリにロード中のモデルを表示
+lmstudio-chat             # ターミナルでチャット
+lmstudio-runtime          # 互換Vulkan runtimeを選択
+lmstudio-load             # 互換runtimeを選んでモデルをロード
+lmstudio-server           # localhost:1234でAPIサーバーを起動
+lmstudio-server-status    # APIサーバーの状態を表示
+lmstudio-server-stop      # APIサーバーを停止
+codex-lmstudio            # CodexをLM Studioで起動
+```
+
+初回はLM Studioを起動してから、モデルをダウンロード・ロードします。
+現在のVulkan runtime 2.33.0にはLinux/VulkanのCLIロード時に`mlock`でクラッシュする既知の問題があるため、`lmstudio-load`は動作確認済みの2.24.0を選択します。2.24.0が未導入なら、LM StudioのRuntime画面から追加してください。
+GUIから直接ロードする場合は、モデル詳細設定の`Keep Model in Memory`をOFFにしてください。このクラッシュの回避策です（[上流issue #2349](https://github.com/lmstudio-ai/lmstudio-bug-tracker/issues/2349)）。
+
+```sh
+lms get openai/gpt-oss-20b
+lmstudio-load openai/gpt-oss-20b --gpu max --context-length 4096
+lmstudio-server
+```
+
+OpenAI互換APIは`http://localhost:1234/v1`で利用できます。
 
 ## 個別更新
 
