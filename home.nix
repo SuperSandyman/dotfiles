@@ -132,12 +132,10 @@ in
       };
       init.defaultBranch = "main";
     };
-    ".codex/skills/empirical-prompt-tuning".source = ./dot_codex/skills/empirical-prompt-tuning;
     ".codex/skills/opensrc".source = ./dot_codex/skills/opensrc;
+    ".codex/skills/notion-memory".source = ./dot_codex/skills/notion-memory;
     ".codex/skills/planning".source = ./dot_codex/skills/planning;
     ".codex/skills/worktree".source = ./dot_codex/skills/worktree;
-    ".codex/skills/hunk-review/SKILL.md".source =
-      "${localPackages.hunkdiff}/share/hunkdiff/skills/hunk-review/SKILL.md";
   };
 
   # The tracked Codex config is a bootstrap template. Codex Desktop mutates
