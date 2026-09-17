@@ -54,6 +54,8 @@
       "dialout"
       "docker"
       "networkmanager"
+      "render"
+      "video"
       "wheel"
     ];
   };

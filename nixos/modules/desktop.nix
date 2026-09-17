@@ -50,6 +50,7 @@
   environment.systemPackages = with pkgs; [
     kdePackages.kate
     microsoft-edge
+    vulkan-tools
   ];
 
   programs.firefox.enable = true;
