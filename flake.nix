@@ -50,10 +50,10 @@
           repository="$(git rev-parse --show-toplevel)"
           cd "$repository"
 
-          nix flake update
-          nix flake update --flake "$repository/profiles/development"
+          nix --accept-flake-config flake update
+          nix --accept-flake-config flake update --flake "$repository/profiles/development"
 
-          nix profile upgrade development
+          nix --accept-flake-config profile upgrade development
 
           echo "Updated the system and development flake.lock files."
           echo "Review the changes, then rebuild NixOS to apply system and Home Manager updates."

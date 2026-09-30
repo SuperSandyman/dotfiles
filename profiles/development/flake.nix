@@ -12,7 +12,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     herdr = {
       url = "github:ogulcancelik/herdr/v0.7.4";
@@ -87,7 +86,7 @@
           gh
 
           # Fast-moving agent and service CLIs.
-          llmAgents.codex
+          localPackages.codex
           llmAgents.copilot-cli
           llmAgents.opencode
           llmAgents.pi

@@ -10,10 +10,11 @@ NixOS と Home Manager の設定です。
 git clone git@github.com:SuperSandyman/dotfiles.git ~/develop/dotfiles
 cd ~/develop/dotfiles
 
-nix profile add path:$PWD/profiles/development#default
-
-# 確認
+# 先にNixOSのキャッシュ設定を有効化
 sudo nixos-rebuild test --flake path:$PWD#nixos
+
+# 開発ツールはNumtideのバイナリキャッシュを使って導入
+nix --accept-flake-config profile add path:$PWD/profiles/development#default
 
 # 適用
 sudo nixos-rebuild switch --flake path:$PWD#nixos

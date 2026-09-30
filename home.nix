@@ -256,7 +256,7 @@ let
     codex-lmstudio = "codex --oss";
     dotfiles-update = "cd ${dotfilesDir} && nix run path:.#update-all";
     nixos-update = "cd ${dotfilesDir} && nix flake update";
-    dev-update = "cd ${dotfilesDir} && nix flake update --flake ./profiles/development && nix profile upgrade development";
+    dev-update = "cd ${dotfilesDir} && nix --accept-flake-config flake update --flake ./profiles/development && nix --accept-flake-config profile upgrade development";
     nixos-switch = "sudo nixos-rebuild switch --flake path:${dotfilesDir}#nixos";
   };
 in
