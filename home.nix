@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  localPackages,
   pkgs,
   ...
 }:
@@ -312,12 +311,6 @@ in
     syntaxHighlighting.enable = true;
     inherit shellAliases;
     initContent = lib.mkOrder 1200 ''
-      if [[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]]; then
-        source "$HOME/google-cloud-sdk/path.zsh.inc"
-      fi
-      if [[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]]; then
-        source "$HOME/google-cloud-sdk/completion.zsh.inc"
-      fi
       if command -v herdr >/dev/null 2>&1; then
         source <(herdr completion zsh)
       fi
@@ -352,7 +345,6 @@ in
     "nvim/after".source = ./private_dot_config/nvim/after;
     "nvim/lua".source = ./private_dot_config/nvim/lua;
     "ghostty/config".source = ./private_dot_config/ghostty/config;
-    "ghostty/empty_config.ghostty".source = ./private_dot_config/ghostty/empty_config.ghostty;
     "eza/theme.yml".source = ./private_dot_config/eza/theme.yml;
   };
 

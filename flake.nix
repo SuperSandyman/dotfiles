@@ -76,9 +76,6 @@
 
       homeConfigurations.sandyman = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = {
-          inherit localPackages;
-        };
         modules = [
           plasma-manager.homeModules.plasma-manager
           ./home.nix
@@ -97,9 +94,6 @@
               useUserPackages = true;
               backupFileExtension = "nix-backup";
               sharedModules = [ plasma-manager.homeModules.plasma-manager ];
-              extraSpecialArgs = {
-                inherit localPackages;
-              };
               users.sandyman = import ./home.nix;
             };
           }

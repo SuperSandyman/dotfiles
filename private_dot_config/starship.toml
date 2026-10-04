@@ -1,6 +1,5 @@
 format = """
 [░▒▓](#9A348E)\
-$os\
 $username\
 [](bg:#DA627D fg:#9A348E)\
 $directory\
@@ -38,12 +37,6 @@ style_user = "bg:#9A348E"
 style_root = "bg:#9A348E"
 format = '[$user ]($style)'
 disabled = false
-
-# An alternative to the username module which displays a symbol that
-# represents the current operating system
-[os]
-style = "bg:#9A348E"
-disabled = true # Disabled by default
 
 [directory]
 style = "bg:#DA627D"

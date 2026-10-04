@@ -18,7 +18,4 @@
     dates = "weekly";
     options = "--delete-older-than 14d";
   };
-
-  # Old bootable generations also retain complete system closures.
-  boot.loader.systemd-boot.configurationLimit = 10;
 }
