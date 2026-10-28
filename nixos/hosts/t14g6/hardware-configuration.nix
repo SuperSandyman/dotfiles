@@ -37,7 +37,7 @@
   swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  # Required for the Mesa Vulkan device used by llama.cpp on the Arc 140V.
+  # Enable accelerated graphics for the built-in Intel GPU.
   hardware.graphics.enable = true;
   hardware.cpu.intel.npu.enable = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

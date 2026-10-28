@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   imports = [
@@ -6,7 +6,8 @@
     ../../modules/base.nix
     ../../modules/desktop.nix
     ../../nix-storage.nix
-  ];
+  ]
+  ++ lib.optional (builtins.pathExists ../../../local/t14g6-system.nix) ../../../local/t14g6-system.nix;
 
   networking.hostName = "sandyman-nixos";
   networking.firewall.interfaces.wlp0s20f3.allowedTCPPorts = [ 4390 ];

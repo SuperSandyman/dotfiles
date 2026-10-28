@@ -1,0 +1,104 @@
+{ pkgs, ... }:
+{
+  nixpkgs.overlays = [
+    (final: _: {
+      computer-use-linux = final.callPackage ./computer-use-linux.nix { };
+    })
+  ];
+
+  # Installed tools consume disk, not resident memory. No servers are enabled here.
+  # Fast-moving runtimes/compilers/LSPs are in profiles/development#agent.
+  environment.systemPackages = with pkgs; [
+    bashInteractive
+    zsh
+    fish
+    tmux
+    zellij
+    neovim
+    nano
+    ripgrep
+    fd
+    fzf
+    bat
+    eza
+    tree
+    less
+    file
+    duf
+    dust
+    ncdu
+    zoxide
+    starship
+    jq
+    yq-go
+    sd
+    miller
+    just
+    watchexec
+    hyperfine
+    parallel
+    entr
+    git
+    git-lfs
+    gh
+    delta
+    tig
+    curl
+    wget
+    aria2
+    rsync
+    rclone
+    openssh
+    socat
+    bind
+    mtr
+    iperf3
+    nmap
+    tcpdump
+    nh
+    nix-tree
+    nix-output-monitor
+    nix-index
+    statix
+    deadnix
+    nixfmt
+    htop
+    btop
+    procs
+    lsof
+    strace
+    ltrace
+    gdb
+    smartmontools
+    dmidecode
+    pciutils
+    usbutils
+    openssl
+    gnupg
+    age
+    sops
+    bubblewrap
+    ffmpeg
+    imagemagick
+    exiftool
+    mediainfo
+    pandoc
+    qpdf
+    poppler-utils
+    grim
+    slurp
+    wtype
+    wl-clipboard
+    wf-recorder
+    glib
+    playerctl
+    brightnessctl
+    xdg-utils
+    computer-use-linux
+    unzip
+    zip
+    which
+    psmisc
+    util-linux
+  ];
+}

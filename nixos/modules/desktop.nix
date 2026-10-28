@@ -1,6 +1,19 @@
 { pkgs, ... }:
 
 {
+  nixpkgs.overlays = [
+    (_final: prev: {
+      mozc = prev.mozc.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          # Qt 6.12 rejects leading :: in custom widget names.
+          # Remove when nixpkgs includes https://github.com/google/mozc/issues/1594.
+          substituteInPlace src/gui/dictionary_tool/dictionary_tool.ui \
+            --replace-fail "::mozc::gui::DictionaryContentTableWidget" "mozc::gui::DictionaryContentTableWidget"
+        '';
+      });
+    })
+  ];
+
   services = {
     xserver = {
       enable = true;
@@ -15,6 +28,7 @@
       wayland.enable = true;
     };
     desktopManager.plasma6.enable = true;
+    flatpak.enable = true;
     printing.enable = true;
     pulseaudio.enable = false;
     pipewire = {

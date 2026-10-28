@@ -4,6 +4,18 @@ NixOS と Home Manager の設定です。
 
 開発用ツールは `profiles/development` の独立した flake で管理しています。
 
+## ホスト
+
+| 機種 | Flakeの指定 | OS / ユーザー設定 |
+| --- | --- | --- |
+| ThinkPad T14 Gen6 | `#t14g6`（互換名: `#nixos`、`#t14`） | `nixos/hosts/t14g6/`、`home/t14g6.nix`。unstable / Plasma |
+| ThinkPad X270 | `#x270` | `nixos/hosts/x270/`、`home/x270.nix`。26.05 Stable / Hyprland |
+
+両方とも `sandyman` を使い、ホスト設定とHome Manager設定は独立しています。
+X270の導入、Satelliteの初期化、更新・復旧方法は **[docs/x270.md](docs/x270.md)** を参照してください。
+T14の単独Home Manager設定は `homeConfigurations."sandyman@t14g6"`（互換名: `sandyman`）です。
+以下の既存セットアップ手順と `profiles/development#default` はT14用です。
+
 ## セットアップ
 
 ```sh
@@ -11,13 +23,13 @@ git clone git@github.com:SuperSandyman/dotfiles.git ~/develop/dotfiles
 cd ~/develop/dotfiles
 
 # 先にNixOSのキャッシュ設定を有効化
-sudo nixos-rebuild test --flake path:$PWD#nixos
+sudo nixos-rebuild test --flake path:$PWD#t14g6
 
 # 開発ツールはNumtideのバイナリキャッシュを使って導入
 nix --accept-flake-config profile add path:$PWD/profiles/development#default
 
 # 適用
-sudo nixos-rebuild switch --flake path:$PWD#nixos
+sudo nixos-rebuild switch --flake path:$PWD#t14g6
 ```
 
 ## 更新
@@ -27,11 +39,11 @@ cd ~/develop/dotfiles
 
 # システムと開発環境
 nix run path:.#update-all
-sudo nixos-rebuild switch --flake path:$PWD#nixos
+sudo nixos-rebuild switch --flake path:$PWD#t14g6
 
 # システムのみ
 nix flake update
-sudo nixos-rebuild switch --flake path:$PWD#nixos
+sudo nixos-rebuild switch --flake path:$PWD#t14g6
 
 # 開発環境のみ
 nix flake update --flake ./profiles/development
@@ -47,34 +59,17 @@ dev-update       # 開発環境だけ更新
 nixos-switch     # NixOSを適用
 ```
 
-## ローカルLLM（llama.cpp / Arc 140V）
+Codex は `llm-agents.nix` から導入し、`dev-update` で同リポジトリが提供する最新版に更新します。
 
-モデル名・量子化・コンテキスト長などはOS設定やこのリポジトリに埋め込まず、
-ローカル専用の `~/.config/llama.cpp/gemma4.env` から読み込みます。
-必要なら `GEMMA4_CONFIG=/path/to/profile.env` で別プロファイルに切り替えられます。
-初回起動時に指定モデルが `~/.cache/llama.cpp` へダウンロードされます。
+## このPCだけの設定
 
-```sh
-# Vulkan デバイスの確認
-gemma4-devices
+Git管理に含めない追加設定は `local/` に置きます。このディレクトリ全体を `.gitignore` で除外しています。
+T14では、存在する場合だけ次のモジュールを読み込みます。
 
-# OpenAI 互換サーバー（http://127.0.0.1:8080）
-gemma4-server
+- `local/t14g6-home.nix`: Home Managerの追加設定
+- `local/t14g6-system.nix`: NixOSの追加設定
 
-# ターミナル対話
-gemma4-chat
-```
-
-```sh
-# 4bitプロファイル
-gemma4-4bit-server
-gemma4-4bit-chat
-
-# 空きメモリが多い場合はプロファイルを一時的に上書き
-GEMMA4_GPU_LAYERS=20 gemma4-4bit-server
-
-# 推論を一時的に有効化
-GEMMA4_REASONING=auto GEMMA4_REASONING_BUDGET=-1 gemma4-server
-```
-
-変更後はログアウト／ログインして `render`・`video` グループを反映します。
+ローカル設定も読み込んで適用する場合は、上記手順のように `--flake path:$PWD#t14g6` を使います。
+GitをソースにするFlakeではGit対象外のファイルは含まれません。
+新しくcloneした環境ではローカル設定なしでも評価でき、X270はこれらを読み込みません。
+`local/` はGitから復元できないため、別途バックアップします。

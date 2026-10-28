@@ -1,18 +1,16 @@
 {
   description = "SuperSandyman's NixOS and Home Manager configuration";
 
-  nixConfig = {
-    extra-substituters = [ "https://cache.numtide.com" ];
-    extra-trusted-public-keys = [
-      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-    ];
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixpkgs-x270.url = "github:NixOS/nixpkgs/nixos-26.05";
+    home-manager-x270 = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs-x270";
     };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
@@ -27,8 +25,11 @@
 
   outputs =
     {
+      self,
       nixpkgs,
+      nixpkgs-x270,
       home-manager,
+      home-manager-x270,
       plasma-manager,
       qylock,
       ...
@@ -74,18 +75,18 @@
         meta.description = "Update the system and development environments";
       };
 
-      homeConfigurations.sandyman = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."sandyman@t14g6" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
           plasma-manager.homeModules.plasma-manager
-          ./home.nix
+          ./home/t14g6.nix
         ];
       };
 
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.t14g6 = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          ./nixos/hosts/nixos
+          ./nixos/hosts/t14g6
           home-manager.nixosModules.home-manager
           qylock.nixosModules.default
           {
@@ -94,7 +95,28 @@
               useUserPackages = true;
               backupFileExtension = "nix-backup";
               sharedModules = [ plasma-manager.homeModules.plasma-manager ];
-              users.sandyman = import ./home.nix;
+              users.sandyman = import ./home/t14g6.nix;
+            };
+          }
+        ];
+      };
+
+      # Compatibility aliases for existing commands.
+      homeConfigurations.sandyman = self.homeConfigurations."sandyman@t14g6";
+      nixosConfigurations.nixos = self.nixosConfigurations.t14g6;
+      nixosConfigurations.t14 = self.nixosConfigurations.t14g6;
+
+      nixosConfigurations.x270 = nixpkgs-x270.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./nixos/hosts/x270
+          home-manager-x270.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "nix-backup";
+              users.sandyman = import ./home/x270.nix;
             };
           }
         ];
