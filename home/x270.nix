@@ -21,6 +21,9 @@ in
     BROWSER = "chromium";
   };
   home.packages = with pkgs; [
+    (microsoft-edge.override {
+      commandLineArgs = "--ozone-platform=wayland --enable-wayland-ime --force-renderer-accessibility";
+    })
     mousepad
     libnotify
     seahorse

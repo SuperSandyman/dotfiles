@@ -9,7 +9,7 @@ NixOS と Home Manager の設定です。
 | 機種 | Flakeの指定 | OS / ユーザー設定 |
 | --- | --- | --- |
 | ThinkPad T14 Gen6 | `#t14g6`（互換名: `#nixos`、`#t14`） | `nixos/hosts/t14g6/`、`home/t14g6.nix`。unstable / Plasma |
-| ThinkPad X270 | `#x270` | `nixos/hosts/x270/`、`home/x270.nix`。26.05 Stable / Hyprland |
+| ThinkPad X270 | `#x270` | `nixos/hosts/x270/`、`home/x270.nix`。unstable / Hyprland |
 
 両方とも `sandyman` を使い、ホスト設定とHome Manager設定は独立しています。
 X270の導入、Satelliteの初期化、更新・復旧方法は **[docs/x270.md](docs/x270.md)** を参照してください。

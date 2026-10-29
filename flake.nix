@@ -7,9 +7,9 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs-x270.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-x270.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager-x270 = {
-      url = "github:nix-community/home-manager/release-26.05";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-x270";
     };
     plasma-manager = {

@@ -94,7 +94,7 @@
   services.fstrim.enable = true;
   services.thermald.enable = true;
   services.upower.enable = true;
-  services.journald.extraConfig = "SystemMaxUse=256M";
+  services.journald.settings.Journal.SystemMaxUse = "256M";
   services.logind.settings.Login = {
     HandleLidSwitch = "ignore";
     HandleLidSwitchExternalPower = "ignore";
