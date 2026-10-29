@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="sky" x2="0.9" y2="1">
+      <stop stop-color="#11111b"/><stop offset="0.58" stop-color="#1e1e2e"/><stop offset="1" stop-color="#24273a"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop stop-color="#89b4fa" stop-opacity="0.14"/><stop offset="1" stop-color="#89b4fa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ridge" x2="1" y2="0.5">
+      <stop stop-color="#313244"/><stop offset="0.6" stop-color="#45475a"/><stop offset="1" stop-color="#585b70"/>
+    </linearGradient>
+    <linearGradient id="accent" x2="1" y2="0">
+      <stop stop-color="#89b4fa" stop-opacity="0"/><stop offset="0.6" stop-color="#89b4fa" stop-opacity="0.35"/><stop offset="1" stop-color="#b4befe" stop-opacity="0.6"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1920v1080H0z"/>
+  <ellipse fill="url(#glow)" cx="1510" cy="380" rx="640" ry="560"/>
+  <circle cx="1490" cy="302" r="103" fill="#b4befe" opacity="0.035"/>
+  <circle cx="1490" cy="302" r="131" fill="none" stroke="#89b4fa" stroke-opacity="0.12"/>
+  <path d="M0 780C360 780 520 1010 910 850S1440 480 1920 645V1080H0Z" fill="url(#ridge)" opacity="0.48"/>
+  <path d="M0 780C360 780 520 1010 910 850S1440 480 1920 645" fill="none" stroke="url(#accent)" stroke-width="1.5"/>
+  <path d="M0 907C400 663 640 1070 1080 881S1530 709 1920 833V1080H0Z" fill="#181825" opacity="0.92"/>
+  <path d="M0 907C400 663 640 1070 1080 881S1530 709 1920 833" fill="none" stroke="#b4befe" stroke-opacity="0.08"/>
+  <path d="M0 1018C370 837 710 1090 1150 980S1670 950 1920 1028V1080H0Z" fill="#11111b" opacity="0.64"/>
+</svg>

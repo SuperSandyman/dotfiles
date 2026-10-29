@@ -8,7 +8,10 @@ let
   dotfiles = "${config.home.homeDirectory}/develop/dotfiles";
 in
 {
-  imports = [ ./x270/agent.nix ];
+  imports = [
+    ./x270/agent.nix
+    ./x270/appearance.nix
+  ];
 
   home.username = "sandyman";
   home.homeDirectory = "/home/sandyman";
@@ -121,7 +124,7 @@ in
   };
   dconf.settings."org/gnome/desktop/interface" = {
     toolkit-accessibility = true;
-    color-scheme = "default";
+    color-scheme = "prefer-dark";
   };
   wayland.windowManager.hyprland = {
     enable = true;

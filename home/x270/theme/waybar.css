@@ -1,0 +1,70 @@
+/* Local layout using the Catppuccin palette in mocha.css. */
+* {
+  font-family: "Hack Nerd Font", "Noto Sans CJK JP", sans-serif;
+  font-size: 11px;
+  min-height: 0;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  transition: none;
+}
+
+window#waybar {
+  background: alpha(@mantle, 0.96);
+  color: @text;
+  border: 1px solid alpha(@surface1, 0.7);
+  border-radius: 12px;
+}
+
+tooltip {
+  background: @base;
+  color: @text;
+  border: 1px solid @surface1;
+  border-radius: 10px;
+}
+tooltip label { padding: 8px; }
+
+#custom-launcher {
+  color: @blue;
+  font-size: 20px;
+  padding: 0 15px 0 12px;
+}
+
+#workspaces { margin: 4px 0; }
+#workspaces button {
+  color: @overlay1;
+  background: transparent;
+  border-radius: 8px;
+  min-width: 22px;
+  padding: 0 6px;
+  margin: 0 2px;
+}
+#workspaces button.active {
+  color: @crust;
+  background: linear-gradient(45deg, @blue, @lavender);
+  font-weight: bold;
+}
+#workspaces button.urgent { color: @red; }
+#workspaces button:hover { color: @text; background: @surface0; }
+
+#clock {
+  color: @subtext1;
+  font-weight: bold;
+  padding: 0 12px;
+}
+
+#cpu, #memory, #network, #pulseaudio, #backlight, #upower, #tray {
+  padding: 0 9px;
+  margin: 4px 0;
+  border-radius: 8px;
+}
+#cpu { color: @blue; }
+#memory { color: @mauve; }
+#network { color: @teal; }
+#network.disconnected, #pulseaudio.muted { color: @overlay1; }
+#pulseaudio { color: @peach; }
+#backlight { color: @yellow; }
+#upower { color: @green; }
+#upower image { margin-right: 6px; }
+#upower.charging { color: @teal; }
+#tray { padding-right: 14px; }
